@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listagem de Passagens Aéreas</title>
+  <style>
+    /* Seu estilo CSS aqui */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-image: url('/Imagem/form-img.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="Reserva-logo-container">
+      <img src="/Imagem/header-text.png" alt="Logo Site" />
+    </div>
+  </header>
+  
+
+  <h1>Listagem de Passagens Aéreas</h1>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Origem</th>
+        <th>Destino</th>
+        <th>Data e Hora de Partida</th>
+        <th>Capacidade</th>
+        <th>Preço</th>
+        <th>Número do Voo</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="apiData"></tbody>
+  </table>
+
+  <script>
+    async function fetchApiData() {
+      try {
+        const apiUrl = 'https://reservapassagem.azurewebsites.net/voos/';
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Data from API:', data);
+
+          const tableBody = document.getElementById('apiData');
+          data.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${item.origem_id}</td>
+              <td>${item.destino_id}</td>
+              <td>${item.data_hora_partida}</td>
+              <td>${item.capacidade}</td>
+              <td>${item.preco}</td>
+              <td>${item.numero_voo}</td>
+              <td>
+                <button onclick="reservarVoo(this, '${item.voo_id}')">Reservar</button>
+                <button style="display:none;" onclick="desfazerReserva(this)">Desfazer</button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+        } else {
+          console.log('Erro na chamada à API:', response.statusText);
+        }
+      } catch (error) {
+        console.log('Erro na chamada à API:', error.message);
+      }
+    }
+
+    async function reservarVoo(button, vooId) {
+      console.log('vooId:', vooId);
+      try {
+        vooId = parseInt(vooId.replace("'", ""));
+
+        if (isNaN(vooId)) {
+          console.log('Erro ao converter vooId para um número.');
+          return;
+        }
+
+        const apiUrlReservas = 'https://reservapassagem.azurewebsites.net/reservas/create/';
+
+        const reservaData = {
+          usuario_id: 0,
+          voo_id: vooId,
+          data: new Date().toISOString(),
+          status: 'Reservado',
+        };
+
+        const responseReservas = await fetch(apiUrlReservas, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(reservaData),
+        });
+
+        if (responseReservas.ok) {
+          alert('Reserva efetuada');
+          button.style.display = 'none';
+          const desfazerButton = button.nextElementSibling;
+          desfazerButton.style.display = 'inline-block';
+          desfazerButton.addEventListener('click', () => desfazerReserva(desfazerButton));
+        } else {
+          console.log('Erro ao reservar voo:', responseReservas.status, responseReservas.statusText);
+          const errorText = await responseReservas.text();
+          console.log('Detalhes do erro:', errorText);
+        }
+      } catch (error) {
+        console.log('Erro ao reservar voo:', error.message);
+      }
+    }
+
+    function desfazerReserva(button) {
+      // Implemente a lógica para desfazer a reserva, se necessário
+    }
+
+    window.onload = fetchApiData;
+  </script>
+
+</body>
+
+</html>

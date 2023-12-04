@@ -1,0 +1,14 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-image: url('/Imagem/form-img.jpg'); /* Add the URL of your desired background image */
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #333;
+}

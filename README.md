@@ -8,22 +8,6 @@ Antes de começar, comprovamos os seguintes requisitos instalados:
 Navegador web moderno (Google Chrome, Mozilla Firefox, etc.)
 Python 3.x
 
-# Como executar a aplicação
-
-Clone o repositório para seu ambiente local:
-
-git clone [https://github.com/biancacordeiro19/reservas-de-passagens](https://github.com/biancacordeiro19/Reservas-de-Passagem)
-cd sistema-reservas-passagens
-
-# Execute uma API em Python:
-
-python api.py
-
--Abra o arquivo index.htmlem um navegador web:
-
-# Basta dar um duplo clique no arquivo index.html ou abri-lo com o seu navegador preferido.
-
-Agora você deve estar pronto para explorar e utilizar a aplicação de reservas de passagens aéreas!
 
 # Estrutura do Projeto
 

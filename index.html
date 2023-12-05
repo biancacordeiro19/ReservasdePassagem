@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Listagem de Passagens Aéreas</title>
   <style>
-    /* Seu estilo CSS aqui */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -20,6 +19,7 @@
       flex-direction: column;
       align-items: center;
     }
+
     header {
       margin: 20px 0;
       display: flex;
@@ -35,10 +35,9 @@
       <img src="/Imagem/header-text.png" alt="Logo Site" />
     </div>
   </header>
-  
 
   <h1>Listagem de Passagens Aéreas</h1>
-  <table border="1">
+  <table border="1" style="background-color: white;">
     <thead>
       <tr>
         <th>Origem</th>
@@ -48,6 +47,7 @@
         <th>Preço</th>
         <th>Número do Voo</th>
         <th>Status</th>
+        <th>Ação</th>
       </tr>
     </thead>
     <tbody id="apiData"></tbody>
@@ -61,6 +61,7 @@
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
           },
         });
 
@@ -78,9 +79,10 @@
               <td>${item.capacidade}</td>
               <td>${item.preco}</td>
               <td>${item.numero_voo}</td>
+              <td>${item.status}</td>
               <td>
-                <button onclick="reservarVoo(this, '${item.voo_id}')">Reservar</button>
-                <button style="display:none;" onclick="desfazerReserva(this)">Desfazer</button>
+                <button onclick="reservarVoo(${item.id})">Reservar</button>
+                <button style="display:none;" onclick="desfazerReserva(${item.voo_id})">Desfazer</button>
               </td>
             `;
             tableBody.appendChild(row);
@@ -93,11 +95,10 @@
       }
     }
 
-    async function reservarVoo(button, vooId) {
+    async function reservarVoo(vooId) {
       console.log('vooId:', vooId);
       try {
-        vooId = parseInt(vooId.replace("'", ""));
-
+        vooId = parseInt(vooId);
         if (isNaN(vooId)) {
           console.log('Erro ao converter vooId para um número.');
           return;
@@ -106,9 +107,8 @@
         const apiUrlReservas = 'https://reservapassagem.azurewebsites.net/reservas/create/';
 
         const reservaData = {
-          usuario_id: 0,
+          usuario_id: 1,
           voo_id: vooId,
-          data: new Date().toISOString(),
           status: 'Reservado',
         };
 
@@ -116,28 +116,31 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json'
           },
           body: JSON.stringify(reservaData),
         });
 
         if (responseReservas.ok) {
           alert('Reserva efetuada');
-          button.style.display = 'none';
-          const desfazerButton = button.nextElementSibling;
+          const reservaButton = document.querySelector(`button[data-voo-id="${vooId}"]`);
+          reservaButton.style.display = 'none';
+          const desfazerButton = reservaButton.nextElementSibling;
           desfazerButton.style.display = 'inline-block';
-          desfazerButton.addEventListener('click', () => desfazerReserva(desfazerButton));
+          desfazerButton.addEventListener('click', () => desfazerReserva(vooId));
         } else {
           console.log('Erro ao reservar voo:', responseReservas.status, responseReservas.statusText);
           const errorText = await responseReservas.text();
           console.log('Detalhes do erro:', errorText);
         }
       } catch (error) {
-        console.log('Erro ao reservar voo:', error.message);
+        console.log('Erro ao reservar voo:', error);
       }
     }
 
-    function desfazerReserva(button) {
+    function desfazerReserva(vooId) {
       // Implemente a lógica para desfazer a reserva, se necessário
+      console.log('Desfazendo reserva do vooId:', vooId);
     }
 
     window.onload = fetchApiData;

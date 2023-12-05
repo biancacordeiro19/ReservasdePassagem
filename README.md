@@ -1,6 +1,7 @@
 # ReservasdePassagem
 Sistema de Reservas de Passagens Aéreas
-Bem-vindo ao repositório do Sistema de Reservas de Passagens Aéreas! Este projeto é uma aplicação web que permite aos usuários realizar reservas de passagens aéreas. A aplicação é desenvolvida usando HTML, CSS, JSON para armazenamento local de dados e uma API em Python para gerenciar as operações relacionadas às reservas.
+Bem-vindo ao repositório do Sistema de Reservas de Passagens Aéreas! 
+Este projeto é uma aplicação web que permite aos usuários realizar reservas de passagens aéreas. A aplicação é desenvolvida usando HTML, CSS, JSON para armazenamento local de dados e uma API em Python para gerenciar as operações relacionadas às reservas.
 
 # Pré-requisitos
 Antes de começar, comprovamos os seguintes requisitos instalados:

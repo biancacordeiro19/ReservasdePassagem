@@ -12,7 +12,7 @@ Python 3.x
 
 Clone o repositório para seu ambiente local:
 
-git clone https://github.com/biancacordeiro19/reservas-de-passagens.git
+git clone [https://github.com/biancacordeiro19/reservas-de-passagens](https://github.com/biancacordeiro19/Reservas-de-Passagem)
 cd sistema-reservas-passagens
 
 # Execute uma API em Python:
